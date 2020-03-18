@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_18_150041) do
+ActiveRecord::Schema.define(version: 2020_03_18_151446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "game_teams", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "user_id"
+    t.boolean "spy"
+    t.string "team"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_game_teams_on_game_id"
+    t.index ["user_id"], name: "index_game_teams_on_user_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "red"
+    t.integer "blue"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -27,4 +45,24 @@ ActiveRecord::Schema.define(version: 2020_03_18_150041) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "word_games", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "word_id"
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_word_games_on_game_id"
+    t.index ["word_id"], name: "index_word_games_on_word_id"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "word"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "game_teams", "games"
+  add_foreign_key "game_teams", "users"
+  add_foreign_key "word_games", "games"
+  add_foreign_key "word_games", "words"
 end
