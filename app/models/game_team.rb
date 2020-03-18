@@ -1,4 +1,4 @@
 class GameTeam < ApplicationRecord
-  belongs_to :Game
-  belongs_to :User
+  belongs_to :game
+  belongs_to :user
 end
