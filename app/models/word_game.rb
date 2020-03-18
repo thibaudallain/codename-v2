@@ -1,4 +1,4 @@
 class WordGame < ApplicationRecord
-  belongs_to :Game
-  belongs_to :Word
+  belongs_to :game
+  belongs_to :word
 end
