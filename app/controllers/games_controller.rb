@@ -31,6 +31,16 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
   end
 
+  def update
+    @game = Game.find(params[:id])
+    if params["format"] == "start"
+      @game.update(status: "started")
+    elsif params["format"] == "end"
+      @game.update(status: "over")
+    end
+    redirect_to game_path(@game)
+  end
+
   private
 
   def game_params
