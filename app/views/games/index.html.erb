@@ -1,5 +1,8 @@
 <% @games.each do |game| %>
   <%= game.name %>
   <%= game.status %>
+  <%= game.user.email %>
 <% end %>
+
+<%= link_to "New Game", new_game_path %>
 
