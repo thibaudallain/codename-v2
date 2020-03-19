@@ -24,7 +24,9 @@
   <% end %>
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
-  Bienvenue
+  <% @game.word_games.each do |word| %>
+    <%= word.word.word %>
+  <% end %>
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
   Cette partie a déjà commencé et vous n'en faites pas partie
 <% else %>
