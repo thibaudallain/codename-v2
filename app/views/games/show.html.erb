@@ -20,7 +20,7 @@
   <br>
 
   <% if @game.game_teams.where(validated: true).length >= 4 && @game.user == current_user %>
-  Start a new game
+    <%= link_to "Commencer la partie", game_path(@game, "start"), method: :patch %>
   <% end %>
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
