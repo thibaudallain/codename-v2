@@ -1,6 +1,10 @@
 class GamesController < ApplicationController
   def index
-    @games = Game.all
+    if user_signed_in?
+      @games = Game.all
+    else
+      redirect_to new_user_session_path
+    end
   end
 
   def new
