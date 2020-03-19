@@ -22,7 +22,7 @@ class GamesController < ApplicationController
     @game.save
 
     # user is also participating
-    GameTeam.create(game: @game, user: current_user)
+    GameTeam.create(game: @game, user: current_user, validated: true)
 
     redirect_to games_path
   end
