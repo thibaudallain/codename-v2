@@ -26,6 +26,16 @@
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
   <% @game.word_games.each do |word| %>
     <%= word.word.word %>
+    <br>
+    <% @game.game_teams.each do |player| %>
+      <%= player.user.username %>
+      <br>
+      <%= player.spy %>
+      <br>
+      <%= player.team %>
+      <br>
+      <br>
+    <% end %>
   <% end %>
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
   Cette partie a déjà commencé et vous n'en faites pas partie

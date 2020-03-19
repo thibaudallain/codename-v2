@@ -51,6 +51,11 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     if params["format"] == "start"
       @game.update(status: "started")
+      shuffled_players = @game.game_teams.shuffle
+      shuffled_players[0..shuffled_players.length / 2 - 1].each { |player| player.update(team: "blue") }
+      shuffled_players[shuffled_players.length / 2..-1].each { |player| player.update(team: "red") }
+      @game.game_teams.where(team: "blue").first.update(spy: true)
+      @game.game_teams.where(team: "red").first.update(spy: true)
     elsif params["format"] == "end"
       @game.update(status: "over")
     end
