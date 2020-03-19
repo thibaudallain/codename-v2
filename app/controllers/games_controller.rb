@@ -8,6 +8,7 @@ class GamesController < ApplicationController
   end
 
   def create
+    # game creation
     @game = Game.new(game_params)
     @game.status = "Pending"
     @game.user = current_user
@@ -19,6 +20,10 @@ class GamesController < ApplicationController
       @game.blue = 8
     end
     @game.save
+
+    # user is also participating
+    GameTeam.create(game: @game, user: current_user)
+
     redirect_to games_path
   end
 
