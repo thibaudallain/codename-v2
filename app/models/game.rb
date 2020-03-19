@@ -3,4 +3,6 @@ class Game < ApplicationRecord
   has_many :words, through: :word_games
   has_many :game_teams
   belongs_to :user
+
+  validates :name, presence: true
 end
