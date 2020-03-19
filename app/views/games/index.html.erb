@@ -1,1 +1,5 @@
-Hello
+<% @games.each do |game| %>
+  <%= game.name %>
+  <%= game.status %>
+<% end %>
+
