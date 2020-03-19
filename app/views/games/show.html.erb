@@ -1,16 +1,33 @@
-<%= @game.name %>
-<%= @game.status %>
-<%= @game.user.username %>
+<% if @game.status == "pending" %>
+  <%= @game.name %>
+  <%= @game.status %>
+  <%= @game.user.username %>
 
-<div>liste des joueurs</div>
+  <div>liste des joueurs</div>
 
-<% @game.game_teams.each do |player| %>
-  <%= player.user.username %>
-  <% if @game.user == current_user %>
-    <% if !player.validated %>
-      <%= link_to "Valider", game_game_team_path(@game, player), method: :patch %>
+  <% @game.game_teams.each do |player| %>
+    <%= player.user.username %>
+    <% if @game.user == current_user %>
+      <% if !player.validated %>
+        <%= link_to "Valider", game_game_team_path(@game, player), method: :patch %>
+      <% end %>
     <% end %>
   <% end %>
+
+  <%= link_to "Apply", game_game_teams_path(@game), method: :post %>
+
+  <br>
+  <br>
+
+  <% if @game.game_teams.where(validated: true).length >= 4 && @game.user == current_user %>
+  Start a new game
+  <% end %>
+
+<% elsif @game.status == "started" && @game.users.include?(current_user) %>
+  Bienvenue
+<% elsif @game.status == "started" && !@game.users.include?(current_user) %>
+  Cette partie a déjà commencé et vous n'en faites pas partie
+<% else %>
+  Jeu terminé
 <% end %>
 
-<%= link_to "Apply", game_game_teams_path(@game), method: :post %>

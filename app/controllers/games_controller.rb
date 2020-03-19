@@ -10,7 +10,7 @@ class GamesController < ApplicationController
   def create
     # game creation
     @game = Game.new(game_params)
-    @game.status = "Pending"
+    @game.status = "pending"
     @game.user = current_user
     if rand(0..10) <= 5
       @game.red = 8
