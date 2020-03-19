@@ -6,7 +6,11 @@
 
 <% @game.game_teams.each do |player| %>
   <%= player.user.username %>
-  <%= player.validated %>
+  <% if @game.user == current_user %>
+    <% if !player.validated %>
+      <%= link_to "Valider", game_game_team_path(@game, player), method: :patch %>
+    <% end %>
+  <% end %>
 <% end %>
 
 <%= link_to "Apply", game_game_teams_path(@game), method: :post %>
