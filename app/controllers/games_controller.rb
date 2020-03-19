@@ -24,6 +24,22 @@ class GamesController < ApplicationController
     # user is also participating
     GameTeam.create(game: @game, user: current_user, validated: true)
 
+    # generation of words
+
+    @array_of_words = Word.all.shuffle.first(25)
+    @array_of_words[0..@game.red - 1].each do |word|
+      WordGame.create!(word_id: word.id, game_id: @game.id, color: "red", discovered: false)
+    end
+    @array_of_words[@game.red..(@game.red + @game.blue - 1)].each do |word|
+      WordGame.create!(word_id: word.id, game_id: @game.id, color: "blue", discovered: false)
+    end
+    @array_of_words[(@game.red + @game.blue)..-2].each do |word|
+      WordGame.create!(word_id: word.id, game_id: @game.id, color: "white", discovered: false)
+    end
+    WordGame.create!(word_id: @array_of_words.last.id, game_id: @game.id, color: "black", discovered: false)
+    @list_of_words = WordGame.where(game_id: @game.id)
+    @list_of_words = @list_of_words.shuffle
+
     redirect_to games_path
   end
 
