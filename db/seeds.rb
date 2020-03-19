@@ -7,8 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first
 
 require 'csv'
-
+Game.destroy_all
 Word.destroy_all
+User.destroy_all
 
 csv_options = { col_sep: ';', quote_char: '"', headers: :first_row }
 filepath = "db/words.csv"
@@ -17,7 +18,7 @@ CSV.foreach(filepath, csv_options) do |row|
   Word.create(word: row[0])
 end
 
-User.create( email: 't@code.com', password: "abc123" )
-User.create( email: 'a@code.com', password: "abc123" )
-User.create( email: 'b@code.com', password: "abc123" )
-User.create( email: 'c@code.com', password: "abc123" )
+User.create( email: 't@code.com', password: "abc123", username: "thibaud")
+User.create( email: 'a@code.com', password: "abc123", username: "vianney")
+User.create( email: 'b@code.com', password: "abc123", username: "fistarol")
+User.create( email: 'c@code.com', password: "abc123", username: "frentz")
