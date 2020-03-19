@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   has_many :game_teams, dependent: :destroy
   has_many :games
+
+  validates :username, presence: true
 end
