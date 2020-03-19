@@ -7,6 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first
 
 require 'csv'
+GameTeam.destroy_all
+WordGame.destroy_all
 Game.destroy_all
 Word.destroy_all
 User.destroy_all
