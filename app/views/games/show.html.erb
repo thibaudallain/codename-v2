@@ -1,0 +1,9 @@
+<%= @game.name %>
+<%= @game.status %>
+<%= @game.user.username %>
+
+<div>liste des joueurs</div>
+
+<% @game.game_teams.each do |player| %>
+  <%= player.user.username %>
+<% end %>

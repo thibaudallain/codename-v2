@@ -1,7 +1,9 @@
 <% @games.each do |game| %>
-  <%= game.name %>
-  <%= game.status %>
-  <%= game.user.username %>
+  <%= link_to game_path(game) do %>
+    <%= game.name %>
+    <%= game.status %>
+    <%= game.user.username %>
+  <% end %>
 <% end %>
 
 <%= link_to "New Game", new_game_path %>

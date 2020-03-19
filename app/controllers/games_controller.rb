@@ -22,6 +22,10 @@ class GamesController < ApplicationController
     redirect_to games_path
   end
 
+  def show
+    @game = Game.find(params[:id])
+  end
+
   private
 
   def game_params
