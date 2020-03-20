@@ -20,12 +20,20 @@
   <br>
 
   <% if @game.game_teams.where(validated: true).length >= 4 && @game.user == current_user %>
-    <%= link_to "Commencer la partie", game_path(@game, "start"), method: :patch %>
+    <%= link_to "Commencer la partie", game_path(@game, "start"), method: :patch, data: { confirm: "Are you sure?" } %>
   <% end %>
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
   <% @game.word_games.each do |word| %>
-    <%= word.word.word %>
+    <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
+      <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
+        <%= word.word.word %>
+        <%= word.discovered %>
+      <% end %>
+    <% else %>
+      <%= word.word.word %>
+      <%= word.discovered %>
+    <% end %>
     <br>
   <% end %>
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
