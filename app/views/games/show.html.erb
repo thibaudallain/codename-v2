@@ -24,7 +24,7 @@
   <% end %>
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
-  <% @game.word_games.each do |word| %>
+  <% @game.word_games.order(:order).each do |word| %>
     <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
       <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
         <%= word.word.word %>
