@@ -1,0 +1,24 @@
+<div class="col-6">
+  <ul class="list-group mt-5" id="blue-team">
+    <% if game.turn == "blue" %>
+      <li class="list-group-item bg-primary text-center">Equipe Bleue</li>
+    <% else %>
+      <li class="list-group-item text-center">Equipe Bleue</li>
+    <% end %>
+    <% game.game_teams.where(team: "blue").each do |player| %>
+      <li class="list-group-item"><%= player.user.username.capitalize %></li>
+    <% end %>
+  </ul>
+</div>
+<div class="col-6">
+  <ul class="list-group mt-5" id="red-team">
+    <% if game.turn == "red" %>
+      <li class="list-group-item bg-danger text-center">Equipe rouge</li>
+    <% else %>
+      <li class="list-group-item text-center">Equipe Rouge</li>
+    <% end %>
+    <% game.game_teams.where(team: "red").each do |player| %>
+      <li class="list-group-item"><%= player.user.username.capitalize %></li>
+    <% end %>
+  </ul>
+</div>

@@ -46,111 +46,39 @@
   <% end %>
 
 <!-- Jeu démarré -->
-<!-- Pas espion -->
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
 
-<div class="row row-cols-5 mt-2" id="word-grid" data-game=<%= @game.id %>>
-
-  <% @game.word_games.order(:order).each do |word| %>
-    <div class="col">
-
-      <% if @game.game_teams.where(user: current_user).first.spy == false %>
-
-        <!-- à l'équipe de jouer -->
-        <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
-          <% if word.discovered == true %>
-                <% if word.color == "blue" %>
-                  <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-                <% elsif word.color == "red" %>
-                  <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-                <% elsif word.color == "white" %>
-                  <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-                <% else %>
-                  <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-                <% end %>
-              <% else %>
-            <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
-                <div class="btn w-100 btn-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-              <% end %>
-          <% end %>
-        <!-- pas à l'équipe de jouer -->
-        <% else %>
-          <% if word.discovered == true %>
-            <% if word.color == "blue" %>
-              <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-            <% elsif word.color == "red" %>
-              <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-            <% elsif word.color == "white" %>
-              <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-            <% else %>
-              <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-            <% end %>
-          <% else %>
-            <div class="bg-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-          <% end %>
-        <% end %>
-
-      <% else %>
-        <% if word.discovered == true %>
-          <% if word.color == "blue" %>
-            <div class="bg-primary py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
-          <% elsif word.color == "red" %>
-            <div class="bg-danger py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
-          <% elsif word.color == "white" %>
-            <div class="bg-warning py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
-          <% else %>
-            <div class="bg-dark py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
-          <% end %>
-        <% else %>
-          <% if word.color == "blue" %>
-            <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-          <% elsif word.color == "red" %>
-            <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-          <% elsif word.color == "white" %>
-            <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-          <% else %>
-            <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-          <% end %>
-        <% end %>
-      <% end %>
-
+<!-- pas espion -->
+<% if @game.game_teams.where(user: current_user).first.spy == false %>
+  <!-- équipe qui joue -->
+  <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
+    <div class="row row-cols-5 mt-2" id="word-grid-seeker-player" data-game="<%= @game.id %>">
+      <%= render 'grid_seeker_player', game: @game %>
+    </div>
+  <!-- équipe qui ne joue pas -->
+  <% else %>
+    <div class="row row-cols-5 mt-2" id="word-grid-seeker-not-player" data-game="<%= @game.id %>">
+      <%= render 'grid_seeker_not_player', game: @game %>
     </div>
   <% end %>
-</div>
+
+<!-- Espion -->
+<% else %>
+    <div class="row row-cols-5 mt-2" id="word-grid-spy" data-game="<%= @game.id %>">
+      <%= render 'grid_spy', game: @game %>
+    </div>
+<% end %>
 
 
 <div class="row mt-5">
   <div class="col bg-dark w-100 p-1">
   </div>
 </div>
-
-<div class="row">
-  <div class="col-6">
-    <ul class="list-group mt-5">
-      <% if @game.turn == "blue" %>
-        <li class="list-group-item bg-primary text-center">Equipe Bleue</li>
-      <% else %>
-        <li class="list-group-item text-center">Equipe Bleue</li>
-      <% end %>
-      <% @game.game_teams.where(team: "blue").each do |player| %>
-        <li class="list-group-item"><%= player.user.username.capitalize %></li>
-      <% end %>
-    </ul>
-  </div>
-  <div class="col-6">
-    <ul class="list-group mt-5">
-      <% if @game.turn == "red" %>
-        <li class="list-group-item bg-danger text-center">Equipe rouge</li>
-      <% else %>
-        <li class="list-group-item text-center">Equipe Rouge</li>
-      <% end %>
-      <% @game.game_teams.where(team: "red").each do |player| %>
-        <li class="list-group-item"><%= player.user.username.capitalize %></li>
-      <% end %>
-    </ul>
-  </div>
+<div class="row" id="lists">
+  <%= render 'list', game: @game %>
 </div>
+
 
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
   Cette partie a déjà commencé et vous n'en faites pas partie
