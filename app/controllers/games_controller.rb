@@ -19,9 +19,11 @@ class GamesController < ApplicationController
     if rand(0..10) <= 5
       @game.red = 8
       @game.blue = 7
+      @game.turn = "red"
     else
       @game.red = 7
       @game.blue = 8
+      @game.turn = "blue"
     end
     @game.save
 
