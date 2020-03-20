@@ -1,43 +1,157 @@
+<!-- Jeu en attente de démarrage -->
+
 <% if @game.status == "pending" %>
-  <%= @game.name %>
-  <%= @game.status %>
-  <%= @game.user.username %>
+  <div class="card text-center m-2">
+    <div class="card-header">
+      <%= @game.user.username.capitalize %>
+    </div>
+    <div class="card-body">
+      <p class="card-text"><%= @game.name %></p>
+    </div>
+    <div class="card-footer text-muted">
+      <%= @game.created_at.strftime("%d/%m/%Y à %k:%M") %>
+    </div>
+  </div>
 
-  <div>liste des joueurs</div>
+  <ul class="list-group m-2">
+    <% @game.game_teams.each do |player| %>
 
-  <% @game.game_teams.each do |player| %>
-    <%= player.user.username %>
-    <% if @game.user == current_user %>
-      <% if !player.validated %>
-        <%= link_to "Valider", game_game_team_path(@game, player), method: :patch %>
-      <% end %>
+    <% if player.user == current_user %>
+      <li class="list-group-item active">
+    <% else %>
+      <li class="list-group-item">
     <% end %>
+        <div class="d-flex justify-content-between align-items-center">
+          <%= player.user.username.capitalize %>
+          <% if @game.user == current_user %>
+            <% if !player.validated %>
+              <%= link_to "Valider", game_game_team_path(@game, player), method: :patch, class: "btn btn-success" %>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <% unless @game.user == current_user %>
+    <div class="d-flex justify-content-center">
+      <%= link_to "Demande à Participer", game_game_teams_path(@game), method: :post, class: "btn btn-success" %>
+    </div>
   <% end %>
-
-  <%= link_to "Apply", game_game_teams_path(@game), method: :post %>
-
-  <br>
-  <br>
 
   <% if @game.game_teams.where(validated: true).length >= 4 && @game.user == current_user %>
-    <%= link_to "Commencer la partie", game_path(@game, "start"), method: :patch, data: { confirm: "Are you sure?" } %>
+    <div class="d-flex justify-content-center">
+      <%= link_to "Commencer la partie", game_path(@game, "start"), method: :patch, data: { confirm: "Es-tu sûr ?" }, class: "btn btn-success" %>
+    </div>
   <% end %>
 
+<!-- Jeu démarré -->
+<!-- Pas espion -->
+
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
+
+<div class="row row-cols-5 mt-2">
+
   <% @game.word_games.order(:order).each do |word| %>
-    <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
-      <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
-        <%= word.word.word %>
-        <%= word.discovered %>
-        <%= word.color %>
+    <div class="col">
+
+      <% if @game.game_teams.where(user: current_user).first.spy == false %>
+
+        <!-- à l'équipe de jouer -->
+        <% if @game.game_teams.where(user: current_user).first.team == @game.turn %>
+          <% if word.discovered == true %>
+                <% if word.color == "blue" %>
+                  <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+                <% elsif word.color == "red" %>
+                  <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+                <% elsif word.color == "white" %>
+                  <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+                <% else %>
+                  <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+                <% end %>
+              <% else %>
+            <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
+                <div class="btn w-100 btn-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+              <% end %>
+          <% end %>
+        <!-- pas à l'équipe de jouer -->
+        <% else %>
+          <% if word.discovered == true %>
+            <% if word.color == "blue" %>
+              <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+            <% elsif word.color == "red" %>
+              <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+            <% elsif word.color == "white" %>
+              <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+            <% else %>
+              <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+            <% end %>
+          <% else %>
+            <div class="bg-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <% end %>
+        <% end %>
+
+      <% else %>
+        <% if word.discovered == true %>
+          <% if word.color == "blue" %>
+            <div class="bg-primary py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+          <% elsif word.color == "red" %>
+            <div class="bg-danger py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+          <% elsif word.color == "white" %>
+            <div class="bg-warning py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+          <% else %>
+            <div class="bg-dark py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+          <% end %>
+        <% else %>
+          <% if word.color == "blue" %>
+            <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <% elsif word.color == "red" %>
+            <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <% elsif word.color == "white" %>
+            <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <% else %>
+            <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <% end %>
+        <% end %>
       <% end %>
-    <% else %>
-      <%= word.word.word %>
-      <%= word.discovered %>
-      <%= word.color %>
-    <% end %>
-    <br>
+
+    </div>
   <% end %>
+</div>
+
+
+<div class="row mt-5">
+  <div class="col bg-dark w-100 p-1">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <ul class="list-group mt-5">
+      <% if @game.turn == "blue" %>
+        <li class="list-group-item bg-primary text-center">Equipe Bleue</li>
+      <% else %>
+        <li class="list-group-item text-center">Equipe Bleue</li>
+      <% end %>
+      <% @game.game_teams.where(team: "blue").each do |player| %>
+        <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-6">
+    <ul class="list-group mt-5">
+      <% if @game.turn == "red" %>
+        <li class="list-group-item bg-danger text-center">Equipe rouge</li>
+      <% else %>
+        <li class="list-group-item text-center">Equipe Rouge</li>
+      <% end %>
+      <% @game.game_teams.where(team: "red").each do |player| %>
+        <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
   Cette partie a déjà commencé et vous n'en faites pas partie
 <% else %>

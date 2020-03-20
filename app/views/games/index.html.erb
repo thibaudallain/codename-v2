@@ -1,10 +1,18 @@
 <% @games.each do |game| %>
-  <%= link_to game_path(game) do %>
-    <%= game.name %>
-    <%= game.status %>
-    <%= game.user.username %>
-  <% end %>
+  <div class="card m-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>Créé par <%= game.user.username.capitalize %> le <%= game.created_at.strftime("%d/%m/%Y à %k:%M") %></div>
+      <% if game.status == "pending" %>
+        <div><%= link_to "Voir", game_path(game), class: "btn btn-primary" %></div>
+      <% end %>
+    </div>
+    <div class="card-body">
+      <p class="card-title"><%= game.name %></p>
+    </div>
+  </div>
 <% end %>
 
-<%= link_to "New Game", new_game_path %>
+<div class="d-flex justify-content-center">
+  <%= link_to "Crée ta partie", new_game_path, class: "btn btn-success" %>
+</div>
 

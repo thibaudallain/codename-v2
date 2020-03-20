@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   def index
     if user_signed_in?
-      @games = Game.all
+      @games = Game.all.where(status: "pending").order(:created_at)
     else
       redirect_to new_user_session_path
     end
