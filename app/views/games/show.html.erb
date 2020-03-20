@@ -29,10 +29,12 @@
       <%= link_to game_word_game_path(@game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
         <%= word.word.word %>
         <%= word.discovered %>
+        <%= word.color %>
       <% end %>
     <% else %>
       <%= word.word.word %>
       <%= word.discovered %>
+      <%= word.color %>
     <% end %>
     <br>
   <% end %>
