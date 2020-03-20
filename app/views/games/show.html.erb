@@ -50,7 +50,7 @@
 
 <% elsif @game.status == "started" && @game.users.include?(current_user) %>
 
-<div class="row row-cols-5 mt-2">
+<div class="row row-cols-5 mt-2" id="word-grid" data-game=<%= @game.id %>>
 
   <% @game.word_games.order(:order).each do |word| %>
     <div class="col">
@@ -157,4 +157,6 @@
 <% else %>
   Jeu terminé
 <% end %>
+
+
 
