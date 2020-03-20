@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_131549) do
+ActiveRecord::Schema.define(version: 2020_03_20_221321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_131549) do
     t.datetime "updated_at", null: false
     t.boolean "discovered"
     t.integer "order"
+    t.boolean "missed"
     t.index ["game_id"], name: "index_word_games_on_game_id"
     t.index ["word_id"], name: "index_word_games_on_word_id"
   end
