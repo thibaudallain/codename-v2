@@ -26,12 +26,10 @@ class GamesController < ApplicationController
       @game.turn = "blue"
     end
     @game.save
-
     # user is also participating
     GameTeam.create(game: @game, user: current_user, validated: true)
 
     # generation of words
-
     @array_of_words = Word.all.shuffle.first(25)
     @array_of_words[0..@game.red - 1].each do |word|
       WordGame.create!(word_id: word.id, game_id: @game.id, color: "red", discovered: false)
@@ -43,8 +41,8 @@ class GamesController < ApplicationController
       WordGame.create!(word_id: word.id, game_id: @game.id, color: "white", discovered: false)
     end
     WordGame.create!(word_id: @array_of_words.last.id, game_id: @game.id, color: "black", discovered: false)
-    @list_of_words = WordGame.where(game_id: @game.id)
-    @list_of_words = @list_of_words.shuffle
+
+    WordGame.where(game: @game).shuffle.each_with_index { |word, i| word.update(order: i + 1) }
 
     redirect_to games_path
   end
