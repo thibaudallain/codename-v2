@@ -1,19 +1,34 @@
-<% game.word_games.order(:order).each do |word| %>
-  <div class="col">
-    <!-- si découvert -->
-    <% if word.discovered == true %>
-      <% if word.color == "blue" %>
-        <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-      <% elsif word.color == "red" %>
-        <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-      <% elsif word.color == "white" %>
-        <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-      <% else %>
-        <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
-      <% end %>
-    <!-- si pas découvert -->
-    <% else %>
-      <div class="btn w-100 btn-light py-3 mb-2 text-center text-break disabled"><%= word.word.word %></div>
-    <% end %>
+<% if game.status == "over" %>
+  <div class="card text-white bg-secondary m-2">
+    <div class="card-header">Cette partie a déjà commencé. Tu n'en fais pas partie.</div>
   </div>
+  <% if game.won == "blue" %>
+    <div class="card text-white bg-primary m-2">
+      <div class="card-header">Bravo les bleus</div>
+    </div>
+  <% else %>
+    <div class="card text-white bg-danger m-2">
+      <div class="card-header">Bravo les rouges</div>
+    </div>
+  <% end %>
+<% else %>
+  <% game.word_games.order(:order).each do |word| %>
+    <div class="col">
+      <!-- si découvert -->
+      <% if word.discovered == true %>
+        <% if word.color == "blue" %>
+          <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% elsif word.color == "red" %>
+          <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% elsif word.color == "white" %>
+          <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% else %>
+          <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% end %>
+      <!-- si pas découvert -->
+      <% else %>
+        <div class="btn w-100 btn-light py-3 mb-2 text-center text-break disabled"><%= word.word.word %></div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>

@@ -50,7 +50,7 @@
 
 <!-- Jeu démarré -->
 
-<% elsif @game.status == "started" && @game.users.include?(current_user) %>
+<% elsif @game.status == "started" || "over" && @game.users.include?(current_user) %>
 
 <!-- pas espion -->
 <% if @game.game_teams.where(user: current_user).first.spy == false %>
@@ -83,20 +83,10 @@
 </div>
 
 
-<% elsif @game.status == "started" && !@game.users.include?(current_user) %>
+<% else %>
   <div class="card text-white bg-secondary m-2">
     <div class="card-header">Cette partie a déjà commencé. Tu n'en fais pas partie.</div>
   </div>
-<% else %>
-  <% if @game.won == "blue" %>
-    <div class="card text-white bg-primary m-2">
-      <div class="card-header">Bravo les bleus</div>
-    </div>
-  <% else %>
-    <div class="card text-white bg-danger m-2">
-      <div class="card-header">Bravo les rouges</div>
-    </div>
-  <% end %>
 <% end %>
 
 
