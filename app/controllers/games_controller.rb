@@ -31,20 +31,23 @@ class GamesController < ApplicationController
     GameTeam.create(game: @game, user: current_user, validated: true)
 
     # generation of words
-    @array_of_words = Word.all.shuffle.first(25)
+    @array_of_words = Word.all.sample(25)
+    final_array = []
     @array_of_words[0..@game.red - 1].each do |word|
-      WordGame.create!(word_id: word.id, game_id: @game.id, color: "red", discovered: false)
+      final_array << { word_id: word.id, game_id: @game.id, color: "red", discovered: false }
     end
     @array_of_words[@game.red..(@game.red + @game.blue - 1)].each do |word|
-      WordGame.create!(word_id: word.id, game_id: @game.id, color: "blue", discovered: false)
+      final_array << { word_id: word.id, game_id: @game.id, color: "blue", discovered: false }
     end
     @array_of_words[(@game.red + @game.blue)..-2].each do |word|
-      WordGame.create!(word_id: word.id, game_id: @game.id, color: "white", discovered: false)
+      final_array << { word_id: word.id, game_id: @game.id, color: "white", discovered: false }
     end
-    WordGame.create!(word_id: @array_of_words.last.id, game_id: @game.id, color: "black", discovered: false)
+    final_array << { word_id: @array_of_words.last.id, game_id: @game.id, color: "black", discovered: false }
 
-    WordGame.where(game: @game).shuffle.each_with_index { |word, i| word.update(order: i + 1) }
-
+    final_array.shuffle.each_with_index do|word_to_create, i|
+      word_to_create[:order] = i + 1
+      WordGame.create(word_to_create)
+    end
     redirect_to games_path
   end
 
@@ -68,8 +71,11 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    raise
-
+    @game = Game.find(params[:id])
+    @game.game_teams.each { |player| player.destroy }
+    @game.word_games.each { |word| word.destroy }
+    @game.destroy
+    redirect_to games_path
   end
 
   private
