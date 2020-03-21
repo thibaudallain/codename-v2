@@ -6,4 +6,5 @@ Rails.application.routes.draw do
     resources :game_teams, only: [:create, :update]
     resources :word_games, only: [:update]
   end
+  mount ActionCable.server => "/cable"
 end
