@@ -8,15 +8,15 @@ class WordGamesController < ApplicationController
       @game.update(turn: new_turn)
       change = true
     end
-    if WordGame.where(game: @game, discovered: false, color: "red").length == 0
-      @game.update(won: "red", status: "over")
-    elsif WordGame.where(game: @game, discovered: false, color: "blue").length == 0
-      @game.update(won: "red", status: "over")
-    end
     if change
       @word_game.update(discovered: true, missed: true)
     else
       @word_game.update(discovered: true)
+    end
+    if WordGame.where(game: @game, discovered: false, color: "red").length == 0
+      @game.update(won: "red", status: "over")
+    elsif WordGame.where(game: @game, discovered: false, color: "blue").length == 0
+      @game.update(won: "red", status: "over")
     end
     redirect_to game_path(@game)
   end

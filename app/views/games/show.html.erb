@@ -15,7 +15,6 @@
 
   <ul class="list-group m-2">
     <% @game.game_teams.each do |player| %>
-
     <% if player.user == current_user %>
       <li class="list-group-item active">
     <% else %>
@@ -27,13 +26,17 @@
             <% if !player.validated %>
               <%= link_to "Valider", game_game_team_path(@game, player), method: :patch, class: "btn btn-success" %>
             <% end %>
+          <% else %>
+            <% if !player.validated %>
+              <div class="badge badge-secondary">Validation en attente</div>
+            <% end %>
           <% end %>
         </div>
       </li>
     <% end %>
   </ul>
 
-  <% unless @game.user == current_user %>
+  <% unless @game.user == current_user || @game.users.include?(current_user) %>
     <div class="d-flex justify-content-center">
       <%= link_to "Demande à Participer", game_game_teams_path(@game), method: :post, class: "btn btn-success" %>
     </div>
@@ -81,9 +84,19 @@
 
 
 <% elsif @game.status == "started" && !@game.users.include?(current_user) %>
-  Cette partie a déjà commencé et vous n'en faites pas partie
+  <div class="card text-white bg-secondary m-2">
+    <div class="card-header">Cette partie a déjà commencé. Tu n'en fais pas partie.</div>
+  </div>
 <% else %>
-  Jeu terminé
+  <% if @game.won == "blue" %>
+    <div class="card text-white bg-primary m-2">
+      <div class="card-header">Bravo les bleus</div>
+    </div>
+  <% else %>
+    <div class="card text-white bg-danger m-2">
+      <div class="card-header">Bravo les rouges</div>
+    </div>
+  <% end %>
 <% end %>
 
 

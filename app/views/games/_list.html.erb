@@ -6,7 +6,11 @@
       <li class="list-group-item text-center">Equipe Bleue</li>
     <% end %>
     <% game.game_teams.where(team: "blue").each do |player| %>
-      <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% if player.spy == true %>
+        <li class="list-group-item"><%= player.user.username.capitalize %> - espion.ne</li>
+      <% else %>
+        <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% end %>
     <% end %>
   </ul>
 </div>
@@ -18,7 +22,11 @@
       <li class="list-group-item text-center">Equipe Rouge</li>
     <% end %>
     <% game.game_teams.where(team: "red").each do |player| %>
-      <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% if player.spy == true %>
+        <li class="list-group-item"><%= player.user.username.capitalize %> - espion.ne</li>
+      <% else %>
+        <li class="list-group-item"><%= player.user.username.capitalize %></li>
+      <% end %>
     <% end %>
   </ul>
 </div>

@@ -1,7 +1,8 @@
 class GamesController < ApplicationController
   def index
     if user_signed_in?
-      @games = Game.all.where(status: "pending").order(:created_at)
+      @games_pending = Game.all.where(status: "pending").order("created_at DESC")
+      @games_started = Game.all.where(status: "started").order("created_at DESC")
     else
       redirect_to new_user_session_path
     end
@@ -64,6 +65,11 @@ class GamesController < ApplicationController
       @game.update(status: "over")
     end
     redirect_to game_path(@game)
+  end
+
+  def destroy
+    raise
+
   end
 
   private

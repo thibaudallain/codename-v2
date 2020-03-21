@@ -15,7 +15,7 @@
 
     <!-- si pas découvert -->
     <% else %>
-      <%= link_to game_word_game_path(game, word), method: :patch, data: { confirm: "Are you sure?" } do %>
+      <%= link_to game_word_game_path(game, word), method: :patch, data: { confirm: "Es-tu sûr de toi ?" } do %>
           <div class="btn w-100 btn-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
       <% end %>
     <% end %>

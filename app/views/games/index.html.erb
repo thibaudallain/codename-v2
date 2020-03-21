@@ -1,13 +1,41 @@
-<% @games.each do |game| %>
+<div class="card text-white bg-secondary m-2">
+  <div class="card-header">TES PARTIES EN COURS</div>
+</div>
+
+<% @games_started.each do |game| %>
   <div class="card m-2">
     <div class="card-header d-flex justify-content-between align-items-center">
       <div>Créé par <%= game.user.username.capitalize %> le <%= game.created_at.strftime("%d/%m/%Y à %k:%M") %></div>
-      <% if game.status == "pending" %>
-        <div><%= link_to "Voir", game_path(game), class: "btn btn-primary" %></div>
-      <% end %>
+      <div>
+        <%= link_to "Jouer !", game_path(game), class: "btn btn-primary" %>
+      </div>
     </div>
     <div class="card-body">
       <p class="card-title"><%= game.name %></p>
+      <% if current_user == game.user %>
+        <%= link_to "Supprimer", game_path(game), method: :delete, class: "text-secondary", data: { confirmation: "Es-tu sûr ?"} %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="card text-white bg-secondary m-2">
+  <div class="card-header">LES PARTIES EN ATTENTE DE JOUEURS</div>
+</div>
+
+<% @games_pending.each do |game| %>
+  <div class="card m-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>Créé par <%= game.user.username.capitalize %> le <%= game.created_at.strftime("%d/%m/%Y à %k:%M") %></div>
+      <div>
+        <%= link_to "Voir", game_path(game), class: "btn btn-primary" %>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-title"><%= game.name %></p>
+      <% if current_user == game.user %>
+        <%= link_to "Supprimer", game_path(game), method: :delete, class: "text-secondary", data: { confirmation: "Es-tu sûr ?"} %>
+      <% end %>
     </div>
   </div>
 <% end %>
