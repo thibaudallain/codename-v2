@@ -1,14 +1,38 @@
 <% if game.status == "over" %>
-  <div class="card text-white bg-secondary m-2">
-    <div class="card-header">Cette partie a déjà commencé. Tu n'en fais pas partie.</div>
+  <div class="col-12 my-3">
+    <% if game.won == "blue" %>
+      <div class="card text-white bg-primary m-2">
+        <div class="card-header">Bravo les bleus</div>
+      </div>
+    <% else %>
+      <div class="card text-white bg-danger m-2">
+        <div class="card-header">Bravo les rouges</div>
+      </div>
+    <% end %>
   </div>
-  <% if game.won == "blue" %>
-    <div class="card text-white bg-primary m-2">
-      <div class="card-header">Bravo les bleus</div>
-    </div>
-  <% else %>
-    <div class="card text-white bg-danger m-2">
-      <div class="card-header">Bravo les rouges</div>
+  <% game.word_games.order(:order).each do |word| %>
+    <div class="col">
+      <% if word.discovered == true %>
+        <% if word.color == "blue" %>
+          <div class="border border-primary py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+        <% elsif word.color == "red" %>
+          <div class="border border-danger py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+        <% elsif word.color == "white" %>
+          <div class="border border-secondary py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+        <% else %>
+          <div class="border border-dark py-3 mb-2 text-center text-break discovered"><%= word.word.word %></div>
+        <% end %>
+      <% else %>
+        <% if word.color == "blue" %>
+          <div class="bg-primary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% elsif word.color == "red" %>
+          <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% elsif word.color == "white" %>
+          <div class="bg-secondary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+        <% else %>
+          <div class="bg-dark py-3 mb-2 text-center text-break text-white"><%= word.word.word %></div>
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 <% else %>
