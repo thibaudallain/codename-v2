@@ -18,12 +18,12 @@ class GamesController < ApplicationController
     @game.status = "pending"
     @game.user = current_user
     if rand(0..10) <= 5
-      @game.red = 8
-      @game.blue = 7
+      @game.red = 9
+      @game.blue = 8
       @game.turn = "red"
     else
-      @game.red = 7
-      @game.blue = 8
+      @game.red = 8
+      @game.blue = 9
       @game.turn = "blue"
     end
     @game.save
@@ -66,6 +66,9 @@ class GamesController < ApplicationController
       @game.game_teams.where(team: "red").first.update(spy: true)
     elsif params["format"] == "end"
       @game.update(status: "over")
+    elsif params["format"] == "leave"
+      new_turn = @game.turn == "red" ? "blue" : "red"
+      @game.update(turn: new_turn)
     end
     redirect_to game_path(@game)
   end

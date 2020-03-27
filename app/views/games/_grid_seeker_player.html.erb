@@ -46,17 +46,23 @@
         <% elsif word.color == "red" %>
           <div class="bg-danger py-3 mb-2 text-center text-break"><%= word.word.word %></div>
         <% elsif word.color == "white" %>
-          <div class="bg-warning py-3 mb-2 text-center text-break"><%= word.word.word %></div>
+          <div class="bg-secondary py-3 mb-2 text-center text-break"><%= word.word.word %></div>
         <% else %>
           <div class="bg-dark py-3 mb-2 text-center text-break"><%= word.word.word %></div>
         <% end %>
 
       <!-- si pas découvert -->
       <% else %>
-        <%= link_to game_word_game_path(game, word), method: :patch, data: { confirm: "Es-tu sûr de toi ?" } do %>
+        <%= link_to game_word_game_path(game, word), method: :patch do %>
             <div class="btn w-100 btn-light py-3 mb-2 text-center text-break"><%= word.word.word %></div>
         <% end %>
       <% end %>
     </div>
+
   <% end %>
+    <div class="col-12 mt-5">
+      <div class="d-flex w-100 justify-content-center">
+        <%= link_to "Laisser la main", game_path(game, "leave"), method: :patch, class: "btn btn-secondary" %>
+      </div>
+  </div>
 <% end %>
